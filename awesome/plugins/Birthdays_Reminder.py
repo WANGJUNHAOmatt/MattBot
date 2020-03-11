@@ -1,5 +1,4 @@
 from nonebot import on_command, CommandSession
-from GlobalValue import normal_user
 from test import Birthdays
 import datetime
 
@@ -63,3 +62,11 @@ async def del_birthday(session: CommandSession):
         await session.send('已取消删除！')
     print("del_birthday", user_id, birthday, name, check)
     await session.send('完成！')
+
+
+@on_command('database', aliases=('数据库', '用户信息'))
+async def get_database(session: CommandSession):
+    birthdays = Birthdays()
+    user_id = session.ctx['user_id']
+    if user_id == 813499516:
+        await session.send(birthdays.print_database())

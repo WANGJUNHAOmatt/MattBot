@@ -54,8 +54,15 @@ class Birthdays(object):
             self.birthday_database = pickle.load(f)
 
     # 打印整个数据库
-    def print_database(self):
-        print(self.birthday_database)
+    def print_database(self) -> str:
+        data = ""
+        for user in self.birthday_database:
+            data += str(user) + '\n'
+            for date in self.birthday_database[user]:
+                data += date.isoformat() + ':' + str(self.birthday_database[user][date]) + '\n'
+            data += '\n'
+        print(data)
+        return data
 
     # 返回用户的好友生日列表
     def get_birthday_list(self, user_id):
@@ -69,29 +76,6 @@ class Birthdays(object):
                 msg += str(key) + ' ' + str(value) + '\n'
                 print(key, value)
             return msg
-
-    # 2020/03/11 已被get_recent_birthdays()函数替代。
-    # # 获取接下来指定天数（默认14）的好友生日信息
-    # def get_next_birthdays(self, user_id, days=14):
-    #     if self.birthday_database.get(user_id) is None:
-    #         msg = "未添加好友生日，请联系qq813499516添加生日（通过命令直接添加生日正在开发中）"
-    #         print(msg)
-    #         return msg
-    #     else:
-    #         msg = ""
-    #         for i in range(days):
-    #             add_days = datetime.timedelta(days=i)
-    #             if self.birthday_database.get(user_id).get(datetime.date.today()+add_days) is not None:
-    #                 msg += str(datetime.date.today()+add_days) + ' ' + \
-    #                        str(self.birthday_database[user_id][datetime.date.today()+add_days]) + '\n'
-    #                 # print(datetime.date.today()+add_days,
-    #                 #       self.birthday_database[user_id][datetime.date.today()+add_days])
-    #         if len(msg) == 0:
-    #             msg = "接下来的" + str(days) + "天，没有朋友过生日呢！"
-    #         else:
-    #             msg = "您有以下朋友要过生日了！\n" + msg
-    #         print(msg)
-    #         return msg
 
     # 遍历所有生日并返回距离当前指定天数（默认14）以内的生日信息
     def get_recent_birthdays(self, user_id, days=14):
@@ -120,8 +104,6 @@ class Birthdays(object):
 
 if __name__ == '__main__':
     birthdays = Birthdays()
-    for user_id in birthdays.birthday_database:
-        print(user_id)
     # 打印整个数据库
     birthdays.print_database()
 
@@ -146,7 +128,7 @@ if __name__ == '__main__':
     # birthdays.get_next_birthdays(813499516)
 
     # 再次打印整个数据库
-    birthdays.print_database()
+    # birthdays.print_database()
 
 
 # birthday_database = {

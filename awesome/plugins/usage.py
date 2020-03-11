@@ -9,9 +9,11 @@ async def usage(session: CommandSession):
     arg = session.current_arg_text.strip().lower()
     if not arg:
         # 如果用户没有发送参数，则发送功能列表
-        await session.send(
-            '我现在支持的功能有：\n' + '\n'.join(p.name for p in plugins) +
-            '\n输入‘使用方法’根据指引获得具体使用方式')
+        msg = "我现在支持的功能有：\n"
+        for index, p in enumerate(plugins):
+            msg += str(index+1) + '. ' + p.name + '\n'
+        msg += '输入‘使用方法’根据指引获得具体使用方式' + '\n如果遇到问题请联系qq813499516，感谢您的使用！'
+        await session.send(msg)
         return
 
     # 如果发了参数则发送相应命令的使用帮助
