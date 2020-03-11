@@ -2,7 +2,7 @@ from datetime import datetime
 import nonebot
 import pytz
 from aiocqhttp.exceptions import Error as CQHttpError
-import getSS
+from test import Birthdays
 
 
 # @nonebot.scheduler.scheduled_job('interval', seconds=10)
@@ -27,6 +27,16 @@ async def _():
 
     except CQHttpError:
         pass
+
+# 发送生日信息
+@nonebot.scheduler.scheduled_job('cron', hour='6')
+async def send_birthday_news():
+    bot = nonebot.get_bot()
+    birthday = Birthdays()
+    for user_id in birthday.birthday_database:
+        print(f"给{user_id}发送了早安+生日消息！")
+        await bot.send_private_msg(user_id=user_id, message=f'早上好！\n{birthday.get_recent_birthdays(user_id)}')
+        await bot.send_private_msg(user_id=813499516, message=f'已经给{user_id}发送了早安+生日消息！')
 
 
 # ss基本废了

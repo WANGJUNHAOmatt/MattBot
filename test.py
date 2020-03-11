@@ -13,13 +13,14 @@ class Birthdays(object):
     def add_birthday(self, user_id, date, name):
         if self.birthday_database.get(user_id) is None:
             self.birthday_database[user_id] = {}
+            self.birthday_database[user_id][datetime.date(2003, 1, 19)] = ["王骏豪"]
         if self.birthday_database.get(user_id).get(date) is None:
             self.birthday_database.get(user_id)[date] = []
         self.birthday_database.get(user_id).get(date).append(name)
 
         # TODO 添加按照时间先后排序之后再保存
 
-        print(f"添加成功！date={date}, name={name}")
+        print(f"添加成功！date={date.isoformat()}, name={name}")
         # 添加后直接保存到本地
         self.save_database()
 
@@ -59,7 +60,7 @@ class Birthdays(object):
     # 返回用户的好友生日列表
     def get_birthday_list(self, user_id):
         if self.birthday_database.get(user_id) is None:
-            msg = "未添加好友生日，请联系qq813499516添加生日（通过命令直接添加生日正在开发中）"
+            msg = "未添加好友生日，请输入'添加生日'命令直接添加您好友的生日"
             print(msg)
             return msg
         else:
@@ -69,45 +70,83 @@ class Birthdays(object):
                 print(key, value)
             return msg
 
-    # 获取接下来指定天数（默认14）的好友生日信息
-    def get_next_birthdays(self, user_id, days=14):
+    # 2020/03/11 已被get_recent_birthdays()函数替代。
+    # # 获取接下来指定天数（默认14）的好友生日信息
+    # def get_next_birthdays(self, user_id, days=14):
+    #     if self.birthday_database.get(user_id) is None:
+    #         msg = "未添加好友生日，请联系qq813499516添加生日（通过命令直接添加生日正在开发中）"
+    #         print(msg)
+    #         return msg
+    #     else:
+    #         msg = ""
+    #         for i in range(days):
+    #             add_days = datetime.timedelta(days=i)
+    #             if self.birthday_database.get(user_id).get(datetime.date.today()+add_days) is not None:
+    #                 msg += str(datetime.date.today()+add_days) + ' ' + \
+    #                        str(self.birthday_database[user_id][datetime.date.today()+add_days]) + '\n'
+    #                 # print(datetime.date.today()+add_days,
+    #                 #       self.birthday_database[user_id][datetime.date.today()+add_days])
+    #         if len(msg) == 0:
+    #             msg = "接下来的" + str(days) + "天，没有朋友过生日呢！"
+    #         else:
+    #             msg = "您有以下朋友要过生日了！\n" + msg
+    #         print(msg)
+    #         return msg
+
+    # 遍历所有生日并返回距离当前指定天数（默认14）以内的生日信息
+    def get_recent_birthdays(self, user_id, days=14):
         if self.birthday_database.get(user_id) is None:
-            msg = "未添加好友生日，请联系qq813499516添加生日（通过命令直接添加生日正在开发中）"
+            msg = "未添加好友生日，请输入'添加生日'命令直接添加您好友的生日）"
             print(msg)
             return msg
         else:
             msg = ""
-            for i in range(days):
-                add_days = datetime.timedelta(days=i)
-                if self.birthday_database.get(user_id).get(datetime.date.today()+add_days) is not None:
-                    msg += str(datetime.date.today()+add_days) + ' ' + \
-                           str(self.birthday_database[user_id][datetime.date.today()+add_days]) + '\n'
-                    # print(datetime.date.today()+add_days,
-                    #       self.birthday_database[user_id][datetime.date.today()+add_days])
+            diff = datetime.timedelta(days=days)
+            today = datetime.date.today()
+            for (birthday, names) in self.birthday_database[user_id].items():
+                next_birthday = birthday.replace(year=today.year)
+                if next_birthday < today:
+                    next_birthday = next_birthday.replace(year=today.year+1)
+                if next_birthday - today < diff:
+                    msg += birthday.isoformat() + ' ' + str(names) + '\n'
             if len(msg) == 0:
                 msg = "接下来的" + str(days) + "天，没有朋友过生日呢！"
+            else:
+                msg = "您有以下朋友要过生日了！\n" + msg
             print(msg)
             return msg
-
     pass
 
 
 if __name__ == '__main__':
     birthdays = Birthdays()
-    # birthdays.print_database()
-    birthdays.get_birthday_list(813499516)
+    for user_id in birthdays.birthday_database:
+        print(user_id)
+    # 打印整个数据库
+    birthdays.print_database()
+
+    # 打印指定用户的列表
+    # birthdays.get_birthday_list(813499516)
+
+    # 打印指定用户指定时间内的生日信息
+    # birthdays.get_recent_birthdays(813499516, 365)
+
     # print(len(birthdays.birthday_database[813499516][datetime.date(2020, 3, 9)]))
-    birthdays.birthday_database[813499516].pop(datetime.date(2020, 3, 9))
-    birthdays.save_database()
+
+    # birthdays.birthday_database[813499516].pop(datetime.date(2020, 3, 9))
+
+    # birthdays.save_database()
+
     # print(birthdays.del_birthday(813499516, datetime.date(2020, 1, 19), "王骏豪"))
-    birthdays.get_birthday_list(813499516)
-    # birthdays.add_birthday(813499516, datetime.date(datetime.date.today().year, 1, 19), "王骏豪")
-    s = "1998-10-03"
-    test = datetime.date.fromisoformat(s)
-    print(test.day)
+
+    # birthdays.get_birthday_list(813499516)
+
+    # birthdays.add_birthday(2504465267, datetime.date(datetime.date.today().year, 1, 19), "王骏豪")
+
     # birthdays.get_next_birthdays(813499516)
-    # birthdays.add_birthday(813499516, datetime.date(datetime.date.today().year, 3, 4), "王梓萌")
-    # birthdays.print_database()
+
+    # 再次打印整个数据库
+    birthdays.print_database()
 
 
 # birthday_database = {
