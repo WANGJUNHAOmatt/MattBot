@@ -29,15 +29,27 @@ async def birthdays_list(session: CommandSession):
     user_id = session.ctx['user_id']
     await session.send(birthdays.get_birthday_list(user_id))
 
+
+def valuable_date(date: str) -> bool:
+    try:
+        datetime.date.fromisoformat(date)
+    except ValueError:
+        return False
+    return True
+
+
 # 添加生日
 @on_command('添加生日', aliases=('addBirthday', 'AddBirthday'))
 async def add_birthday(session: CommandSession):
     # 从会话状态（session.state）中获取城市名称（city），如果当前不存在，则询问用户
     user_id = session.ctx['user_id']
     date = session.get('date', prompt='请输入"YYYY-MM-DD"格式的日期，例：2000-11-22')
+    if not valuable_date(date):
+        session.state.pop('date')
+        session.pause('错误的格式，请输入正确的格式!')
     name = session.get('name', prompt='请输入在那天过生日的人的姓名，例：张三')
     birthday = datetime.date.fromisoformat(date)
-    check = session.get('check', prompt=f'{birthday.isoformat(), name}，您确认吗？（Y/N）')
+    check = session.get('check', prompt=f'{birthday.isoformat(), name}，您确认添加吗？（Y/N）')
     if check == 'Y':
         birthdays = Birthdays()
         birthdays.add_birthday(user_id, birthday, name)
@@ -47,11 +59,15 @@ async def add_birthday(session: CommandSession):
     print("add_birthday", user_id, birthday, name, check)
     await session.send('完成！')
 
+
 # 删除生日
 @on_command('delBirthday', aliases=('删除生日', 'DelBirthday'))
 async def del_birthday(session: CommandSession):
     user_id = session.ctx['user_id']
     date = session.get('date', prompt='请输入"YYYY-MM-DD"格式的日期，例：2000-11-22')
+    if not valuable_date(date):
+        session.state.pop('date')
+        session.pause('错误的格式，请输入正确的格式!')
     name = session.get('name', prompt='请输入在那天过生日的人的姓名，例：张三')
     birthday = datetime.date.fromisoformat(date)
     check = session.get('check', prompt=f'{birthday.isoformat(), name}，您确认吗？（Y/N）')

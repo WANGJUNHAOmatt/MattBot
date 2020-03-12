@@ -80,7 +80,7 @@ class Birthdays(object):
     # 遍历所有生日并返回距离当前指定天数（默认14）以内的生日信息
     def get_recent_birthdays(self, user_id, days=14):
         if self.birthday_database.get(user_id) is None:
-            msg = "未添加好友生日，请输入'添加生日'命令直接添加您好友的生日）"
+            msg = "未添加好友生日，请输入'添加生日'命令直接添加您好友的生日"
             print(msg)
             return msg
         else:
