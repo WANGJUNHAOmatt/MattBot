@@ -99,36 +99,34 @@ class Birthdays(object):
                 msg = "您有以下朋友要过生日了！\n" + msg
             print(msg)
             return msg
+
+    # 对用户发送通知
+    # def send_notice(self, ):
     pass
 
 
 if __name__ == '__main__':
     birthdays = Birthdays()
+    print(list(birthdays.birthday_database.keys()))
     # 打印整个数据库
-    birthdays.print_database()
+    # birthdays.print_database()
 
     # 打印指定用户的列表
-    # birthdays.get_birthday_list(813499516)
+    # birthdays.get_birthday_list(2504465267)
 
-    # 打印指定用户指定时间内的生日信息
+    # 打印指定用户未来指定时间内的生日信息
     # birthdays.get_recent_birthdays(813499516, 365)
 
-    # print(len(birthdays.birthday_database[813499516][datetime.date(2020, 3, 9)]))
+    # 添加指定用户指定的生日信息
+    # birthdays.add_birthday(2504465267, datetime.date(2003, 3, 9), "温良")
 
-    # birthdays.birthday_database[813499516].pop(datetime.date(2020, 3, 9))
+    # 删除指定用户的指定生日信息
+    # birthdays.del_birthday(2504465267, datetime.date(2020, 3, 9), "温良")
+    # birthdays.birthday_database[2504465267].pop(datetime.date(2020, 1, 19))
 
+    # 保存修改
     # birthdays.save_database()
 
-    # print(birthdays.del_birthday(813499516, datetime.date(2020, 1, 19), "王骏豪"))
-
-    # birthdays.get_birthday_list(813499516)
-
-    # birthdays.add_birthday(2504465267, datetime.date(datetime.date.today().year, 1, 19), "王骏豪")
-
-    # birthdays.get_next_birthdays(813499516)
-
-    # 再次打印整个数据库
-    # birthdays.print_database()
 
 
 # birthday_database = {

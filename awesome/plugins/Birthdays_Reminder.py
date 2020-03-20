@@ -1,4 +1,5 @@
 from nonebot import on_command, CommandSession
+import nonebot
 from test import Birthdays
 import datetime
 
@@ -86,3 +87,20 @@ async def get_database(session: CommandSession):
     user_id = session.ctx['user_id']
     if user_id == 813499516:
         await session.send(birthdays.print_database())
+
+
+@on_command('send_notice', aliases=('发送消息', '发送通知'))
+async def send_notice(session: CommandSession):
+    birthdays = Birthdays()
+    if session.ctx['user_id'] != 813499516:
+        return
+    msg = session.get('msg', prompt='请输入想要广播的信息')
+    check = session.get('check', prompt=f'"{str(msg)}"，您确认吗？（Y/N）')
+    bot = nonebot.get_bot()
+    if check == 'Y':
+        for user in list(birthdays.birthday_database.keys()):
+            await bot.send_private_msg(user_id=user, message=msg)
+            await bot.send_private_msg(user_id=813499516, message=f'已经给{user}发送了通知！')
+        await session.send("成功发送")
+    else:
+        await session.send("已取消发送")
