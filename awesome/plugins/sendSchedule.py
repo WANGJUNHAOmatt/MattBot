@@ -1,6 +1,6 @@
 from nonebot import on_command, CommandSession
-from Schedule import get_schedule, get_full_schedule
-from GlobalValue import normal_user
+from awesome.plugins.Schedule import get_schedule, get_full_schedule
+from awesome.plugins.GlobalValue import normal_user
 
 
 __plugin_name__ = '获取课程表'
