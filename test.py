@@ -41,14 +41,14 @@ class Birthdays(object):
     # 保存到本地
     def save_database(self):
         # pickle save
-        with open('birthdays_database.pickle', 'wb') as f:
+        with open('D:\\CODE\\Python\\QQbot\\birthdays_database.pickle' 'wb') as f:
             # Pickle the 'data' dictionary using the highest protocol available.
             pickle.dump(self.birthday_database, f, pickle.HIGHEST_PROTOCOL)
 
     # 从本地读取
     def load_database(self):
         # pickle load
-        with open('birthdays_database.pickle', 'rb') as f:
+        with open('D:\\CODE\\Python\\QQbot\\birthdays_database.pickle', 'rb') as f:
             # The protocol version used is detected automatically, so we do not
             # have to specify it.
             self.birthday_database = pickle.load(f)
