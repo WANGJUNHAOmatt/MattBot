@@ -41,7 +41,7 @@ class Birthdays(object):
     # 保存到本地
     def save_database(self):
         # pickle save
-        with open('D:\\CODE\\Python\\QQbot\\birthdays_database.pickle' 'wb') as f:
+        with open('D:\\CODE\\Python\\QQbot\\birthdays_database.pickle', 'wb') as f:
             # Pickle the 'data' dictionary using the highest protocol available.
             pickle.dump(self.birthday_database, f, pickle.HIGHEST_PROTOCOL)
 
